@@ -1,0 +1,173 @@
+import time
+from scapy.all import *
+# from someip.eth_scapy_someip import eth_scapy_someip
+# from someip.eth_scapy_someip import eth_scapy_sd
+
+# pcap_root_dir = r"C:\Users\Arilou\OneDrive - NNG Kft\ethernet\v1.5\PCAPs_for_demo\in_progress"
+in_pcap_root_dir = r"C:\Users\user\Desktop\Arilou\Sentinel\configuration_create_py_Nir_SE\eth_ids-py_new\noam\Lear_demo_2\in_Pcaps"
+out_pcap_root_dir = r"C:\Users\user\Desktop\Arilou\Sentinel\configuration_create_py_Nir_SE\eth_ids-py_new\noam\Lear_demo_2\out_Pcaps"
+
+# orignal fiel
+orig_file = os.path.join(in_pcap_root_dir, 'legal_ARP_request.pcap')
+
+# new file locaition
+new_file = os.path.join(out_pcap_root_dir, 'ARP_illegal_source_MAC.pcap')
+
+# rd_pcap comes from scapy and loads in our pcap file - read file - into *packets*
+packets = list(rdpcap(orig_file))
+new_packets = packets
+
+# src
+new_packets[0][Ether].src = '02:00:00:00:01:03'    # src
+
+# dst
+# new_packets[0][Ether].dst = 'FF:FF:FF:FF:FF:FF'    # dst
+
+# AVTP_stream_id
+# new_packets[0][Ether][Dot1Q].load = b'\x02\x81\x00\x00\x02\x00\x00\x00\x01\x03\x00\x01yq\xc3\xe1\x04\x00\x01\x10\x00\x08\x00\x02\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+# new_packets[0][Ether][Dot1Q].load = b'\x02\x81\x00\x00\x02\x00\x00\x00\x01\x07\x00\x01yq\xc3\xe1\x04\x00\x01\x10\x00\x08\x00\x02\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+
+# PTPv2_ClockIdentity
+# new_packets[0][Ether][Dot1Q].load = b'\x10\x02\x00,\x00\x00\x02\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x00\xff\xfe\x00\x01\x03\x00\x01\x00\x01\x00\xfd\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+# new_packets[0][Ether][Dot1Q].load = b'\x10\x02\x00,\x00\x00\x02\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x00\xff\xfe\x00\x01\x07\x00\x01\x00\x01\x00\xfd\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+
+# ARP op_mode
+new_packets[0][Ether][ARP].op=4
+
+
+
+
+
+
+
+
+
+
+
+
+
+#
+#
+# # modify only the following packets in the for list
+# for i in (0,1,2,4,5,6,7,8,9,13):
+#     print (i)
+#     print(new_packets[i])
+#     new_packets[i][Ether].src = '02:00:00:00:01:01'
+#     new_packets[i][Ether].dst = '02:00:00:00:00:33'
+#
+# for i in (3,10,11,12,14):
+#     print (i)
+#     print(new_packets[i])
+#     new_packets[i][Ether].src = '02:00:00:00:01:01'
+#
+# new_packets[7][Ether].dst = '01:80:c2:00:01:0e'
+# new_packets[8][Ether].dst = '01:00:00:00:00:01'
+#
+# new_file = os.path.join(pcap_root_dir, '15_packets_new.pcap')
+#
+# # [Noam] show packet content:
+# # packets[1].show()
+# # packets[1] = Ether(packets[2].original)
+#
+# # print("a = {}".format(a))
+# # print("new_packets = {}".format(new_packets))
+# # print("packets = {}".format(packets))
+#
+#
+# packet 5:
+# VLAN_PT (2) 192.168.2.1:40001
+# server: 0x03EB, 0x0064 (Time)
+# to client: HU, 192.168.2.3:40001
+# change src mac to '02:00:00:00:22:22'
+# inspection rule 2 - src_mac
+
+# [Noam] change in packet:
+# packets[19][Ether].src = '22:22:22:22:22:22'
+# packets[1][Ether].dst = '11:11:11:11:11:11'
+# packets[1][Ether][Dot1Q].vlan = 555
+
+# new_packets.append(packets[4])
+
+# packet 6:
+# VLAN_PT (2) 192.168.2.1:40001
+# server: 0x03EB, 0x0065 (Time)
+# to client: HU, 192.168.2.3:40001
+# change VLAN to 3
+# inspection rule 3 - Node - dst_mac+tag1_vlan_id
+
+# packets[5][Ether][Dot1Q].vlan = 3
+# new_packets.append(packets[5])
+
+# packet 7:
+# VLAN_ADAS (2) 192.168.3.4:40001
+# server: 0x07D0, 0x0064 (TrafficSignInfoPDU)
+# to client: IC, 192.168.3.2
+# change method_id to 0x0164
+# inspection rule 32
+
+# new_p6 = packets[6].copy()
+# new_p6[Ether][Dot1Q][IP][UDP][Raw].load = b'\x07\xd0\x01d\x00\x00\x00\x0c\x00\x01\x00\x02\x01\x01\x02\x00\x00\x00\x01\x00'
+# del new_p6[UDP].chksum
+# new_p6 = new_p6.__class__(bytes(new_p6))
+# new_packets.append(new_p6)
+
+
+# packet 8:
+# VLAN_ADAS (3) 192.168.3.4:40001
+# server: 0x07D0, 0x0065 (LaneInfoPDU)
+# to client: IC, 192.168.3.2
+# change client_id to 0x0033
+# inspection rule 35
+
+# new_p7 = packets[7].copy()
+# new_p7[Ether][Dot1Q][IP][UDP][Raw].load = b'\x07\xd0\x00e\x00\x00\x00\x0c\x00\x33\x00\x01\x01\x01\x02\x00dd\x00\x00'
+# del new_p7[UDP].chksum
+# new_p7 = new_p7.__class__(bytes(new_p7))
+# new_packets.append(new_p7)
+
+# packet 9:
+# VLAN_PT (2) 192.168.2.1:40001
+# server: 0x07D0, 0x0065 (LaneInfoPDU)
+# to client: IC, 192.168.2.2
+# change client_id to 0x0005
+# inspection rule 35
+
+# new_p8 = packets[8].copy()
+# new_p8[Ether][Dot1Q][IP][UDP][Raw].load = b'\x03\xe9\x00d\x00\x00\x00\x0c\x00\x05\x00\x01\x01\x01\x02\x00dd\x00\x00'
+# del new_p8[UDP].chksum
+# new_p8 = new_p8.__class__(bytes(new_p8))
+# new_packets.append(new_p8)
+#
+# new_packets.append(packets[9])
+# new_packets.append(packets[10])
+# new_packets.append(packets[11])
+
+# packet 13:
+# VLAN_ADAS (3) 192.168.3.5:40001
+# server: 0x07D2, 0x0064 (ObstacleDetectionPDU)
+# to client: ADAS, 192.168.3.4
+# change destination dst_mac = 02:00:00:00:01:06, dst_ip =192.168.3.6
+# inspection rule 1
+
+# new_p12 = packets[12].copy()
+# new_p12[Ether][Dot1Q][IP].dst = '192.168.3.6'
+# del new_p12[UDP].chksum
+# new_p12 = new_p12.__class__(bytes(new_p12))
+# new_p12[Ether].dst = '02:00:00:00:01:06'
+# new_packets.append(new_p12)
+
+# for i in range(13,len(packets)):
+#     new_packets.append(packets[i])
+
+
+prev_time = time.time()
+packets_in_loop = []
+
+for packet_i in new_packets:
+    # packet_i.time = prev_time + random.randint(1, 20) / 1.0e4
+    packet_i.time = prev_time + 1/1.0e4
+    prev_time = packet_i.time
+    #print("packet_i.time is: {}".format(packet_i.time))
+    packets_in_loop.append(packet_i)
+
+wrpcap(new_file, packets_in_loop)
