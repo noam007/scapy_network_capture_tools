@@ -1,17 +1,16 @@
 import time
 from scapy.all import *
+import os 
 # from someip.eth_scapy_someip import eth_scapy_someip
 # from someip.eth_scapy_someip import eth_scapy_sd
 
-# pcap_root_dir = r"C:\Users\Arilou\OneDrive - NNG Kft\ethernet\v1.5\PCAPs_for_demo\in_progress"
-in_pcap_root_dir = r"C:\Users\user\Desktop\Arilou\Sentinel\configuration_create_py_Nir_SE\eth_ids-py_new\noam\Lear_demo_2\in_Pcaps"
-out_pcap_root_dir = r"C:\Users\user\Desktop\Arilou\Sentinel\configuration_create_py_Nir_SE\eth_ids-py_new\noam\Lear_demo_2\out_Pcaps"
+base_dir = os.path.dirname(__file__)
 
 # orignal fiel
-orig_file = os.path.join(in_pcap_root_dir, 'legal_ARP_request.pcap')
+orig_file = os.path.join(base_dir, 'legal_ARP_request.pcap')
 
 # new file locaition
-new_file = os.path.join(out_pcap_root_dir, 'ARP_illegal_source_MAC.pcap')
+new_file = os.path.join(base_dir, 'ARP_illegal_source_MAC.pcap')
 
 # rd_pcap comes from scapy and loads in our pcap file - read file - into *packets*
 packets = list(rdpcap(orig_file))
@@ -33,18 +32,6 @@ new_packets[0][Ether].src = '02:00:00:00:01:03'    # src
 
 # ARP op_mode
 new_packets[0][Ether][ARP].op=4
-
-
-
-
-
-
-
-
-
-
-
-
 
 #
 #
